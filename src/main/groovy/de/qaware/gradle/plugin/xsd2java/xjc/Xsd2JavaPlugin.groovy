@@ -19,6 +19,9 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 
+/**
+ * Configures the XSD2Java gradle plugin.
+ */
 class Xsd2JavaPlugin implements Plugin<Project> {
 
     def final static XML_BIND_VERSION = '2.2.11'
@@ -28,14 +31,9 @@ class Xsd2JavaPlugin implements Plugin<Project> {
         if (!project.plugins.hasPlugin('java')) {
             project.apply plugin: 'java'
         }
-        project.configurations.maybeCreate('jaxb')
-        def xjc = addEnvironment(project, 'xjc')
 
-        project.dependencies.add('jaxb', "com.sun.xml.bind:jaxb-core:$XML_BIND_VERSION")
-        project.dependencies.add('jaxb', "com.sun.xml.bind:jaxb-impl:$XML_BIND_VERSION")
-        project.dependencies.add('jaxb', "javax.xml.bind:jaxb-api:$XML_BIND_VERSION")
-        project.dependencies.add('jaxb', "com.sun.xml.bind:jaxb-xjc:$XML_BIND_VERSION")
-        project.dependencies.add('jaxb', "javax.activation:activation:1.1.1")
+        addConfigurations(project)
+        def xjc = addEnvironment(project, 'xsd2java')
 
         project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-core:$XML_BIND_VERSION")
         project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-impl:$XML_BIND_VERSION")
@@ -43,12 +41,28 @@ class Xsd2JavaPlugin implements Plugin<Project> {
         project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-xjc:$XML_BIND_VERSION")
         project.dependencies.add(xjc.compileConfigurationName, "javax.activation:activation:1.1.1")
 
-        project.dependencies.add(xjc.compileConfigurationName, "com.github.jaxb-xew-plugin:jaxb-xew-plugin:1.9")
-        project.dependencies.add(xjc.compileConfigurationName, "net.java.dev.jaxb2-commons:jaxb-fluent-api:2.1.8")
+        project.dependencies.add('xsd2javaExtension', "com.github.jaxb-xew-plugin:jaxb-xew-plugin:1.9")
+        project.dependencies.add('xsd2javaExtension', "net.java.dev.jaxb2-commons:jaxb-fluent-api:2.1.8")
     }
 
+    /**
+     * Adds the configurations required by the plugin.
+     *
+     * @param project the project to add the configurations to.
+     */
+    private static void addConfigurations(Project project) {
+        project.configurations.maybeCreate('xsd2java')
+        project.configurations.maybeCreate('xsd2javaExtension')
+    }
+
+    /**
+     * Initializes the given environment.
+     *
+     * @param project The project to initialize the environment for.
+     * @param environment The environments name.
+     * @return The source set for the created environment.
+     */
     private static SourceSet addEnvironment(Project project, String environment) {
-        def configuration = project.configurations.maybeCreate(environment)
         def sourceSet = project.sourceSets.findByName(environment)
 
         if (sourceSet == null) {
@@ -57,7 +71,7 @@ class Xsd2JavaPlugin implements Plugin<Project> {
             })
         }
 
-        project.dependencies.add('compile', project.sourceSets.getByName(environment).output)
+        project.dependencies.add('compile', sourceSet.output)
         sourceSet
     }
 }

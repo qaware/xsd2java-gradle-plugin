@@ -53,8 +53,8 @@ class XSD2JavaTaskTest extends Specification {
         task.execute()
 
         then:
-        assert new File(project.buildDir, '/generated-sources/xjc/dummySchema/BookType.java').exists()
-        assert new File(project.buildDir, '/generated-sources/xjc/dummySchema/BooksType.java').exists()
+        assert new File(project.buildDir, '/generated-sources/xsd2java/dummySchema/BookType.java').exists()
+        assert new File(project.buildDir, '/generated-sources/xsd2java/dummySchema/BooksType.java').exists()
     }
 
     def "GenerateSourcesFromXSDWithExtension"() {
@@ -70,7 +70,7 @@ class XSD2JavaTaskTest extends Specification {
         task.execute()
 
         then:
-        assert new File(project.buildDir, '/generated-sources/xjc/dummySchema/BookType.java').exists()
-        assert new File(project.buildDir, '/generated-sources/xjc/dummySchema/BooksType.java').exists()
+        assert new File(project.buildDir, '/generated-sources/xsd2java/dummySchema/BookType.java').exists()
+        assert new File(project.buildDir, '/generated-sources/xsd2java/dummySchema/BooksType.java').exists()
     }
 }

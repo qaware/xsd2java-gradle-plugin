@@ -61,7 +61,7 @@ class XSD2JavaTask extends DefaultTask {
      * The output directory.
      */
     @OutputDirectory
-    def outputDir = project.file("$project.buildDir/generated-sources/xjc")
+    def outputDir = project.file("$project.buildDir/generated-sources/xsd2java")
 
     /**
      * The actually action for generating the java sources.
@@ -72,7 +72,7 @@ class XSD2JavaTask extends DefaultTask {
         ant.taskdef(
                 name: 'xjc',
                 classname: 'com.sun.tools.xjc.XJCTask',
-                classpath: project.configurations.jaxb.asPath
+                classpath: project.configurations.xsd2javaCompile.asPath
         )
 
         logging.level = LogLevel.DEBUG
@@ -87,7 +87,7 @@ class XSD2JavaTask extends DefaultTask {
             schema(dir: inputDir, includes: '**/*.xsd')
 
             if (extension) {
-                classpath(path: project.configurations.xjc.asPath)
+                classpath(path: project.configurations.xsd2javaExtension.asPath)
             }
 
             for (argument in arguments) {
