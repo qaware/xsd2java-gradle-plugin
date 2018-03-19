@@ -19,32 +19,56 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.*
 
+/**
+ * Generates java sources from a xsd schema.
+ */
 class XSD2JavaTask extends DefaultTask {
 
+    /**
+     * The path were all schemas are located.
+     */
     @Input
     String schemaDirPath = 'src/main/resources/'
 
+    /**
+     * The package name for the generated java sources.
+     */
     @Input
     @Optional
     String packageName
 
+    /**
+     * Adds the xjc build configuration to the ant task as extension.
+     */
     @Input
     @Optional
     Boolean extension = false
 
+    /**
+     * Additionally arguments passed to the ant task.
+     */
     @Input
     @Optional
             arguments = []
 
+    /**
+     * The full path for the where the input files are located. Also used to identify changes on the schemas.
+     */
     @InputDirectory
-    def inputDir = project.file("$project.projectDir/src/main/resources")
+    def inputDir = project.file("$project.projectDir/$schemaDirPath")
 
+    /**
+     * The output directory.
+     */
     @OutputDirectory
     def outputDir = project.file("$project.buildDir/generated-sources/xjc")
 
-
+    /**
+     * The actually action for generating the java sources.
+     */
     @TaskAction
-    public void generateSourcesFromXSD() {
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    void generateSourcesFromXSD() {
         ant.taskdef(
                 name: 'xjc',
                 classname: 'com.sun.tools.xjc.XJCTask',
@@ -60,7 +84,7 @@ class XSD2JavaTask extends DefaultTask {
                 extension: extension,
                 encoding: 'UTF-8'
         ) {
-            schema(dir: schemaDirPath, includes: '**/*.xsd')
+            schema(dir: inputDir, includes: '**/*.xsd')
 
             if (extension) {
                 classpath(path: project.configurations.xjc.asPath)
