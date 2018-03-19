@@ -1,0 +1,35 @@
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  DOCKER_IMAGE_NAME: $CI_PROJECT_NAME
+  CACHE_KEY: $CI_COMMIT_REF_SLUG
+  GRADLE_CACHE: /root/.gradle/**
+
+stages:
+  - build     # compile, unit-tests, integration-tests, package
+  - analyze   # run SonarQube analysis
+  - push      # build docker image and push image to Artifactory
+
+gradle-build:
+  stage: build
+  image: openjdk:8-jdk
+  cache:
+    key: $CACHE_KEY
+    paths:
+      - $GRADLE_CACHE
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - build/docker/*
+  script: "./gradlew --build-cache assemble --stacktrace"
+
+
+sonarqube:
+  stage: analyze
+  image: openjdk:8-jdk
+  cache:
+    key: $CACHE_KEY
+    paths:
+      - $GRADLE_CACHE
+  script:
+    - if [ "$CI_COMMIT_REF_NAME" == "master" ]; then SONAR_BRANCH_NAME=""; else SONAR_BRANCH_NAME="-Dsonar.branch.name=$CI_COMMIT_REF_NAME"; fi
+    - "./gradlew sonarqube $SONAR_BRANCH_NAME -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN --stacktrace"

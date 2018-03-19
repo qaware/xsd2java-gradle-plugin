@@ -1,0 +1,78 @@
+/*
+ *    Copyright (C) 2018 QAware GmbH
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+plugins {
+    id "com.github.hierynomus.license" version "0.14.0"
+    id "org.sonarqube" version "2.6"
+    id 'java-gradle-plugin'
+}
+
+// apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'jacoco'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+jacoco {
+    toolVersion = "0.8.0"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+    }
+}
+
+sourceSets {
+    test {
+        java {
+            srcDirs = []
+        }
+        groovy {
+            srcDirs 'src/test/java'
+        }
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.exclusions", "**/*Generated.java, build/generated/**"
+        property "sonar.projectName", "XSD2Java Gradle Plugin"
+    }
+}
+
+license {
+    skipExistingHeaders = true
+    header rootProject.file('LICENSE')
+    includes(["**/*.java", "**/*.groovy", "**/*.scala"])
+    mapping {
+        java = 'SLASHSTAR_STYLE'
+        groovy = 'SLASHSTAR_STYLE'
+        scala = 'SLASHSTAR_STYLE'
+    }
+}
