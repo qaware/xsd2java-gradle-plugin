@@ -14,36 +14,104 @@
  *    limitations under the License.
  */
 package de.qaware.gradle.plugin.xsd2java.xjc
+
+import org.gradle.api.Action
+import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.Project
+
 /**
  * The extension object for the build.gradle script to configure the xsd2java task.
  */
 class Xsd2JavaPluginExtension {
     /**
-     * The base directory where the xsd schemas are located.
+     * Name of this extension for this plugin.
      */
-    String schemaDirPath = 'src/main/resources/'
+    public static final String NAME = 'xsd2java'
+
     /**
-     * The package name for all the generated java sources.
+     * The base project this extension is active in.
      */
-    String packageName
+    final Project project
+
+    /**
+     * The different xsd schema configurations.
+     */
+    final NamedDomainObjectContainer<Xsd2JavaTaskConfig> schemas
+
     /**
      * Should add the xjc configuration to the ant runner classpath.
      */
     Boolean extension = false
+
     /**
      * Additional arguments for the xsd2java ant task.
      */
-    def arguments = []
-    /**
-     * Do not generate these classes. They are user defined.
-     */
-    String userDefinedClasses = ""
-    /**
-     * The full base directory where the xsd schemas are located.
-     */
-    def inputDir = project.file("$project.projectDir/${schemaDirPath}")
+    List<String> arguments = []
+
     /**
      * The target path write the java sources to.
      */
-    def outputDir = project.file("$project.buildDir/generated-sources/xjc")
+    File outputDir = project.file("${project.buildDir}/generated-sources/xsd2java")
+
+    /**
+     * Initializes the new xsd2java extension.
+     *
+     * @param project the project this extension is added to.
+     */
+    Xsd2JavaPluginExtension(Project project) {
+        this(project, project.container(Xsd2JavaTaskConfig.class))
+    }
+
+    /**
+     * Setup the xsd plugin extension.
+     *
+     * @param project the project
+     * @param schemas the schema container.
+     */
+    Xsd2JavaPluginExtension(Project project, NamedDomainObjectContainer<Xsd2JavaTaskConfig> schemas) {
+        this.project = project
+        this.schemas = schemas
+    }
+
+    /**
+     * @param block the block
+     */
+    void schemas(Closure<?> block) {
+        schemas.configure(block)
+    }
+
+    /**
+     * @param block the block
+     */
+    void schemas(Action<NamedDomainObjectContainer<Xsd2JavaTaskConfig>> block) {
+        block.execute(this.schemas)
+    }
+
+    /**
+     * @return the schema container.
+     */
+    NamedDomainObjectContainer<Xsd2JavaTaskConfig> getSchemas() {
+        return schemas
+    }
+
+    /**
+     * @param extension the new extension value.
+     */
+    void extension(Boolean extension) {
+        this.extension = extension
+    }
+
+    /**
+     * @param arguments The arguments passed to the task
+     */
+    void arguments(List<String> arguments) {
+        this.arguments = arguments
+    }
+
+    /**
+     * @param outputDir The new output dir
+     */
+    void outputDir(File outputDir) {
+        this.outputDir = outputDir
+    }
 }

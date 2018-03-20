@@ -15,8 +15,10 @@
  */
 package de.qaware.gradle.plugin.xsd2java.xjc
 
+import de.qaware.gradle.plugin.xsd2java.xjc.tasks.XSD2JavaTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.tasks.SourceSet
 
 /**
@@ -31,6 +33,8 @@ class Xsd2JavaPlugin implements Plugin<Project> {
         if (!project.plugins.hasPlugin('java')) {
             project.apply plugin: 'java'
         }
+        def xsd2JavaExtension = new Xsd2JavaPluginExtension(project)
+        project.extensions.add(Xsd2JavaPluginExtension.NAME, xsd2JavaExtension)
 
         addConfigurations(project)
         def xjc = addEnvironment(project, 'xsd2java')
@@ -43,6 +47,19 @@ class Xsd2JavaPlugin implements Plugin<Project> {
 
         project.dependencies.add('xsd2javaExtension', "com.github.jaxb-xew-plugin:jaxb-xew-plugin:1.9")
         project.dependencies.add('xsd2javaExtension', "net.java.dev.jaxb2-commons:jaxb-fluent-api:2.1.8")
+
+        project.afterEvaluate {
+            xsd2JavaExtension.schemas.asMap.forEach({ name, config ->
+                Task xsd2Java = project.task("xsd2java${name.capitalize()}", type: XSD2JavaTask) {
+                    schemaDirPath = config.schemaDirPath.toFile()
+                    packageName = config.packageName
+                    outputDir = xsd2JavaExtension.outputDir
+                    arguments = xsd2JavaExtension.arguments
+                    extension = xsd2JavaExtension.extension
+                }
+                project.tasks.compileXsd2javaJava.dependsOn xsd2Java
+            })
+        }
     }
 
     /**

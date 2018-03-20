@@ -28,7 +28,8 @@ class XSD2JavaTask extends DefaultTask {
      * The path were all schemas are located.
      */
     @Input
-    String schemaDirPath = 'src/main/resources/'
+    @InputDirectory
+    File schemaDirPath = project.file("$project.projectDir/src/main/resources/")
 
     /**
      * The package name for the generated java sources.
@@ -52,16 +53,10 @@ class XSD2JavaTask extends DefaultTask {
             arguments = []
 
     /**
-     * The full path for the where the input files are located. Also used to identify changes on the schemas.
-     */
-    @InputDirectory
-    def inputDir = project.file("$project.projectDir/$schemaDirPath")
-
-    /**
      * The output directory.
      */
     @OutputDirectory
-    def outputDir = project.file("$project.buildDir/generated-sources/xsd2java")
+            outputDir = project.file("$project.buildDir/generated-sources/xsd2java")
 
     /**
      * The actually action for generating the java sources.
@@ -84,7 +79,7 @@ class XSD2JavaTask extends DefaultTask {
                 extension: extension,
                 encoding: 'UTF-8'
         ) {
-            schema(dir: inputDir, includes: '**/*.xsd')
+            schema(dir: schemaDirPath, includes: '**/*.xsd')
 
             if (extension) {
                 classpath(path: project.configurations.xsd2javaExtension.asPath)
