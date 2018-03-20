@@ -24,7 +24,7 @@ gradle-build:
     expire_in: 1 day
     paths:
       - build/libs/*
-  script: "./gradlew --build-cache assemble --stacktrace"
+  script: "./gradlew --build-cache clean build --stacktrace"
 
 
 sonarqube:
