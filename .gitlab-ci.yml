@@ -13,7 +13,8 @@ cache:
     - build/
 
 stages:
-  - build     # compile, unit-tests, integration-tests, package
+  - build     # compile, package
+  - test      # unit-tests, integration-tests
   - analyze   # run SonarQube analysis
   - push      # build docker image and push image to Artifactory
 
@@ -24,7 +25,16 @@ gradle-build:
     expire_in: 1 day
     paths:
       - build/libs/*
-  script: "./gradlew --build-cache clean build --stacktrace"
+  script: "./gradlew --build-cache clean assemble --stacktrace"
+
+gradle-test:
+  stage: test
+  image: openjdk:8-jdk
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - build/libs/*
+  script: "./gradlew --build-cache test --stacktrace --info"
 
 
 sonarqube:
