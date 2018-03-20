@@ -43,7 +43,7 @@ class Xsd2JavaPlugin implements Plugin<Project> {
 
         project.afterEvaluate {
             xsd2JavaExtension.schemas.asMap.forEach({ name, config ->
-                configureXsd2javaTask(project, name, config)
+                configureXsd2javaTask(project, xsd2JavaExtension, name, config)
             })
         }
     }
@@ -55,7 +55,7 @@ class Xsd2JavaPlugin implements Plugin<Project> {
      * @param name The name suffix for the source directory task.
      * @param config The configuration for the source directory.
      */
-    private void configureXsd2javaTask(Project project, String name, config) {
+    private void configureXsd2javaTask(Project project, Xsd2JavaPluginExtension xsd2JavaExtension, String name, config) {
         Task xsd2Java = project.task("xsd2java${name.capitalize()}", type: XSD2JavaTask) {
             schemaDirPath = config.schemaDirPath.toFile()
             packageName = config.packageName
