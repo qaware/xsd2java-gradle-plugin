@@ -30,12 +30,7 @@ gradle-build:
 gradle-test:
   stage: test
   image: openjdk:8-jdk
-  artifacts:
-    expire_in: 1 day
-    paths:
-      - build/libs/*
   script: "./gradlew --build-cache test --stacktrace --info"
-
 
 sonarqube:
   stage: analyze
