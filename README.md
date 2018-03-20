@@ -1,6 +1,83 @@
+[![Apache License 2](http://img.shields.io/badge/license-ASF2-blue.svg)](https://github.com/seu-as-code/seu-as-code.plugins/blob/master/LICENSE)
+
 # XSD2Java Gradle Plugin
 
 The XSD2Java Gradle Plugin generates java classes from an existing XSD schema. For this it uses the existing ANT task.
 
+## Usage
+
+Build script snippet for use in all Gradle versions, using the Bintray Maven repository:
+```groovy
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+//            url 'https://dl.bintray.com/seu-as-code/gradle-plugins' tbd
+        }
+    }
+    dependencies {
+        classpath 'de.qaware.gradle.plugins:xsd2java-gradle-plugin:0.1.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'de.qaware.gradle.plugin.xsd2java'
+```
+
+Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
+```groovy
+plugins {
+    id 'de.qaware.gradle.plugin.xsd2java' version '0.1.0-SNAPSHOT'
+}
+```
+## Tasks
+
+The plugin defines the following tasks:
+
+Task name | Depends on | Type | Description
+--------- | ---------- | ---- | ---
+`xsd2java`| -          | `XSD2JavaTask` | Generates all the types as java classes from a xsd schema.
+
+## Configurations
+
+The plugin defines the following configurations:
+
+Configuration Name  | Description
+------------------- | ---
+`xsd2java`          | Used for dependencies that needed by the generated sources.
+`xsd2javaExtension` | Used for extensions for the XJC ANT task.
+
+## Extension Properties
+
+The plugin defines the following extension properties in the `xsd2java` closure:
+
+Property name | Type   | Default value | Description
+------------- | ------ | - | ---
+`schemas`     | `Container<Xsd2JavaTaskConfig>` | - | Contains the configurations for every base directory with schemas.
+`extension`   | `Boolean` | - | Should the ant task load extensions defined in the configuration `xsd2javaExtension`. Default false
+`arguments`   | `List<String>` | - | A list of arguments passed to the ant task
+`outputDir`   | `File` | - | The output directory for the generated sources.
+
+### Example
+
+The following example show the full extension configuration:
+```groovy
+xsd2java {
+    schemas {
+        printJobModel {
+            schemaDirPath "src/main/resources/xsd"
+            packageName "de.qaware.gradle.plugin.xsd2java.dummy.xsd"
+        }
+    }
+    extension true
+    arguments ['-verbose']
+    outputDir "${project.buildDir}/other-dir"
+}
+```
+
 ## Maintainer
+
 Christian Fritz (@chrfritz)
+
+## License
+
+This software is provided under the Apache License, Version 2.0 license. See the `LICENSE` file for details.
