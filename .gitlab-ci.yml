@@ -46,4 +46,4 @@ publishToMaven:
   only:
     - master
   script:
-    - "./gradlew publish -PnexusUrl=$MAVEN_REPO_URL/$MAVEN_SNAPSHOT_REPO -PnexusUsername=$MAVEN_REPO_USER -PnexusPassword=$MAVEN_REPO_PASS --stacktrace"
+    - "./gradlew publishXsd2javaPluginPublicationToMavenRepository -PnexusUrl=$MAVEN_REPO_URL/$MAVEN_SNAPSHOT_REPO -PnexusUsername=$MAVEN_REPO_USER -PnexusPassword=$MAVEN_REPO_PASS --stacktrace"
