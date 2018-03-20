@@ -43,8 +43,7 @@ class XSD2JavaTaskTest extends Specification {
     def "GenerateSourcesFromXSD"() {
         setup:
         XSD2JavaTask task = project.task("xsd2JavaTask", type: XSD2JavaTask) {
-            schemaDirPath = resources
-            inputDir = resources
+            schemaDirPath = resources.toFile()
             packageName = 'dummySchema'
             arguments = ['-verbose']
         } as XSD2JavaTask
@@ -60,8 +59,7 @@ class XSD2JavaTaskTest extends Specification {
     def "GenerateSourcesFromXSDWithExtension"() {
         setup:
         XSD2JavaTask task = project.task("xsd2JavaTask", type: XSD2JavaTask) {
-            schemaDirPath = resources
-            inputDir = resources
+            schemaDirPath = resources.toFile()
             packageName = 'dummySchema'
             extension = true
         } as XSD2JavaTask
