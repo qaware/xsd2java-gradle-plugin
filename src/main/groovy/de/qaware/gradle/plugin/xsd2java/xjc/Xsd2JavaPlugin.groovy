@@ -39,6 +39,40 @@ class Xsd2JavaPlugin implements Plugin<Project> {
         addConfigurations(project)
         def xjc = addEnvironment(project, 'xsd2java')
 
+        addsDependencies(project, xjc)
+
+        project.afterEvaluate {
+            xsd2JavaExtension.schemas.asMap.forEach({ name, config ->
+                configureXsd2javaTask(project, name, config)
+            })
+        }
+    }
+
+    /**
+     * Configures the xsd2java tasks for every source directory.
+     *
+     * @param project The project to configure.
+     * @param name The name suffix for the source directory task.
+     * @param config The configuration for the source directory.
+     */
+    private void configureXsd2javaTask(Project project, String name, config) {
+        Task xsd2Java = project.task("xsd2java${name.capitalize()}", type: XSD2JavaTask) {
+            schemaDirPath = config.schemaDirPath.toFile()
+            packageName = config.packageName
+            outputDir = xsd2JavaExtension.outputDir
+            arguments = xsd2JavaExtension.arguments
+            extension = xsd2JavaExtension.extension
+        }
+        project.tasks.compileXsd2javaJava.dependsOn xsd2Java
+    }
+
+    /**
+     * Adds the required dependencies to the specific configurations.
+     *
+     * @param project The project to add the dependencies to.
+     * @param xjc The source set used to add the dependencies to.
+     */
+    private static void addsDependencies(Project project, SourceSet xjc) {
         project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-core:$XML_BIND_VERSION")
         project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-impl:$XML_BIND_VERSION")
         project.dependencies.add(xjc.compileConfigurationName, "javax.xml.bind:jaxb-api:$XML_BIND_VERSION")
@@ -47,19 +81,6 @@ class Xsd2JavaPlugin implements Plugin<Project> {
 
         project.dependencies.add('xsd2javaExtension', "com.github.jaxb-xew-plugin:jaxb-xew-plugin:1.9")
         project.dependencies.add('xsd2javaExtension', "net.java.dev.jaxb2-commons:jaxb-fluent-api:2.1.8")
-
-        project.afterEvaluate {
-            xsd2JavaExtension.schemas.asMap.forEach({ name, config ->
-                Task xsd2Java = project.task("xsd2java${name.capitalize()}", type: XSD2JavaTask) {
-                    schemaDirPath = config.schemaDirPath.toFile()
-                    packageName = config.packageName
-                    outputDir = xsd2JavaExtension.outputDir
-                    arguments = xsd2JavaExtension.arguments
-                    extension = xsd2JavaExtension.extension
-                }
-                project.tasks.compileXsd2javaJava.dependsOn xsd2Java
-            })
-        }
     }
 
     /**
