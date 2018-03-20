@@ -24,11 +24,15 @@ plugins {
     id "com.github.hierynomus.license" version "0.14.0"
     id "org.sonarqube" version "2.6"
     id 'java-gradle-plugin'
+    id "com.gradle.plugin-publish" version "0.9.10"
+    id "com.jfrog.bintray" version "1.8.0"
 }
 
-// apply plugin: 'java'
+apply plugin: 'base'
+apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'jacoco'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.8
 
@@ -82,5 +86,134 @@ license {
         java = 'SLASHSTAR_STYLE'
         groovy = 'SLASHSTAR_STYLE'
         scala = 'SLASHSTAR_STYLE'
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    classifier = 'javadoc'
+    from groovydoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives groovydocJar
+}
+
+def pomConfig = {
+
+    inceptionYear '2018'
+
+    scm {
+        connection "scm:git:${project.scmUrl}"
+        developerConnection "scm:git:${project.scmUrl}"
+        url project.websiteUrl
+    }
+
+    issueManagement {
+        system 'GitHub'
+        url project.issueTrackerUrl
+    }
+
+    licenses {
+        license([:]) {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+        }
+    }
+
+    organisation {
+        name 'QAware GmbH'
+        url 'https://www.qaware.de'
+    }
+
+    developers {
+        developer {
+            id 'chr-fritz'
+            name 'Chritian Fritz'
+            email 'christian.fritz@qaware.de'
+            organization 'QAware GmbH'
+            organizationUrl 'https://www.qaware.de'
+            roles { role 'Developer' }
+        }
+    }
+}
+
+publishing {
+    publications {
+        xsd2javaPlugin(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact groovydocJar
+
+            pom.withXml {
+                asNode().appendNode('name', project.displayName)
+                asNode().appendNode('description', project.description)
+                asNode().appendNode('url', project.websiteUrl)
+
+                asNode().children().last() + pomConfig
+            }
+        }
+    }
+    repositories {
+        // set the properties via -P to publish to your company repo
+        maven {
+            url = project.hasProperty('nexusUrl') ? project.nexusUrl : ''
+            credentials {
+                username = project.hasProperty('nexusUsername') ? project.nexusUsername : ''
+                password = project.hasProperty('nexusPassword') ? project.nexusPassword : ''
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
+    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
+    publications = ['xsd2java']
+    dryRun = false
+    publish = true
+    pkg {
+        repo = project.bintrayRepo
+        name = project.name
+        desc = project.description
+        licenses = ['Apache-2.0']
+        labels = ['gradle', 'plugin', 'code generation', 'xsd', 'xsd2java', 'code', 'generation']
+        websiteUrl = project.websiteUrl
+        issueTrackerUrl = project.issueTrackerUrl
+        vcsUrl = project.scmUrl
+        publicDownloadNumbers = true
+        version {
+            name = project.version
+            desc = project.description
+            released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
+            vcsTag = "v${project.version}"
+            attributes = [
+                    'gradle-plugin': ['de.qaware.gradle.plugin.xsd2java', project.group, project.name].join(':')
+            ]
+            mavenCentralSync {
+                sync = true
+            }
+        }
+    }
+}
+
+pluginBundle {
+    website = project.websiteUrl
+    vcsUrl = project.scmUrl
+
+    plugins {
+        xsd2javaPlugin {
+            id = 'de.qaware.gradle.plugin.xsd2java'
+            displayName = project.displayName
+            description = project.description
+            tags = ['xsd2java', 'code', 'generation']
+            version = project.version
+        }
     }
 }
