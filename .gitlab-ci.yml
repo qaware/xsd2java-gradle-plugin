@@ -38,3 +38,12 @@ sonarqube:
   script:
     - if [ "$CI_COMMIT_REF_NAME" == "master" ]; then SONAR_BRANCH_NAME=""; else SONAR_BRANCH_NAME="-Dsonar.branch.name=$CI_COMMIT_REF_NAME"; fi
     - "./gradlew sonarqube $SONAR_BRANCH_NAME -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN --stacktrace"
+
+
+publishToMaven:
+  stage: push
+  image: openjdk:8-jdk
+  only:
+    - master
+  script:
+    - "./gradlew publish -PnexusUrl=$MAVEN_REPO_URL/$MAVEN_SNAPSHOT_REPO -PnexusUsername=$MAVEN_REPO_USER -PnexusPassword=$MAVEN_REPO_PASS --stacktrace"
