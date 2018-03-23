@@ -27,7 +27,6 @@ class XSD2JavaTask extends DefaultTask {
     /**
      * The path were all schemas are located.
      */
-    @Input
     @InputDirectory
     File schemaDirPath = project.file("$project.projectDir/src/main/resources/")
 
