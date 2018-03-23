@@ -12,11 +12,11 @@ buildscript {
     repositories {
         mavenCentral()
         maven {
-//            url 'https://dl.bintray.com/seu-as-code/gradle-plugins' tbd
+            url 'https://dl.bintray.com/qaware-oss/gradle-plugins'
         }
     }
     dependencies {
-        classpath 'de.qaware.gradle.plugins:xsd2java-gradle-plugin:0.1.0-SNAPSHOT'
+        classpath 'de.qaware.gradle.plugin:xsd2java-gradle-plugin:1.0.0'
     }
 }
 
@@ -26,7 +26,7 @@ apply plugin: 'de.qaware.gradle.plugin.xsd2java'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.gradle.plugin.xsd2java' version '0.1.0-SNAPSHOT'
+    id 'de.qaware.gradle.plugin.xsd2java' version '1.0.0'
 }
 ```
 ## Tasks
