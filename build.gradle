@@ -175,7 +175,7 @@ publishing {
 bintray {
     user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
     key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
-    publications = ['xsd2java']
+    publications = ['xsd2javaPlugin']
     dryRun = false
     publish = true
     pkg {
@@ -197,7 +197,7 @@ bintray {
                     'gradle-plugin': ['de.qaware.gradle.plugin.xsd2java', project.group, project.name].join(':')
             ]
             mavenCentralSync {
-                sync = true
+                sync = false
             }
         }
     }
