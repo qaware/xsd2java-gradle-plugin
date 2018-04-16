@@ -135,7 +135,7 @@ def pomConfig = {
     developers {
         developer {
             id 'chr-fritz'
-            name 'Chritian Fritz'
+            name 'Christian Fritz'
             email 'christian.fritz@qaware.de'
             organization 'QAware GmbH'
             organizationUrl 'https://www.qaware.de'
@@ -143,6 +143,9 @@ def pomConfig = {
         }
     }
 }
+
+def snapshotURL = project.hasProperty('snapshotUrl') ? project.snapshotUrl : ''
+def releaseURL = project.hasProperty('releaseUrl') ? project.releaseUrl : ''
 
 publishing {
     publications {
@@ -163,7 +166,7 @@ publishing {
     repositories {
         // set the properties via -P to publish to your company repo
         maven {
-            url = project.hasProperty('nexusUrl') ? project.nexusUrl : ''
+            url = "${project.version.endsWith('-SNAPSHOT') ? snapshotURL : releaseURL}"
             credentials {
                 username = project.hasProperty('nexusUsername') ? project.nexusUsername : ''
                 password = project.hasProperty('nexusPassword') ? project.nexusPassword : ''
