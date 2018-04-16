@@ -1,4 +1,5 @@
-[![Apache License 2](http://img.shields.io/badge/license-ASF2-blue.svg)](https://github.com/seu-as-code/seu-as-code.plugins/blob/master/LICENSE)
+[![Download](https://api.bintray.com/packages/qaware-oss/gradle-plugins/xsd2java-gradle-plugin/images/download.svg) ](https://bintray.com/qaware-oss/gradle-plugins/xsd2java-gradle-plugin/_latestVersion)
+[![Apache License 2](http://img.shields.io/badge/license-ASF2-blue.svg)](https://github.com/qaware/xsd2java-gradle-plugin/blob/master/LICENSE)
 
 # XSD2Java Gradle Plugin
 
