@@ -62,16 +62,42 @@ Property name | Type   | Default value | Description
 
 The following example show the full extension configuration:
 ```groovy
+plugins {
+    id 'de.qaware.gradle.plugin.xsd2java' version '1.0.0'
+}
+
 xsd2java {
     schemas {
-        printJobModel {
-            schemaDirPath "src/main/resources/xsd"
-            packageName "de.qaware.gradle.plugin.xsd2java.dummy.xsd"
+        dummy {
+            schemaDirPath 'src/main/resources/xsd'
+            packageName 'de.qaware.gradle.plugin.xsd2java.dummy.xsd'
         }
     }
+    
     extension true
     arguments ['-verbose']
     outputDir "${project.buildDir}/other-dir"
+}
+```
+
+In case you are using the Kotlin DSL for you build script, the above example looks as follows:
+
+```kotlin
+plugins {
+    id("de.qaware.gradle.plugin.xsd2java") version "1.0.0"
+}
+
+xsd2java {
+    schemas {
+        create("dummy") {
+            schemaDirPath = file("src/main/resources/xsd").toPath()
+            packageName = "de.qaware.gradle.plugin.xsd2java.dummy.xsd"
+        }
+    }
+    
+    extension = true
+    arguments = listOf("-verbose")
+    outputDir = file("${project.buildDir}/other-dir")
 }
 ```
 
