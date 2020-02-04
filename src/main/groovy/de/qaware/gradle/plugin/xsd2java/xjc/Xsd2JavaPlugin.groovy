@@ -26,8 +26,6 @@ import org.gradle.api.tasks.SourceSet
  */
 class Xsd2JavaPlugin implements Plugin<Project> {
 
-    def final static XML_BIND_VERSION = '2.2.11'
-
     @Override
     void apply(Project project) {
         if (!project.plugins.hasPlugin('java')) {
@@ -73,10 +71,10 @@ class Xsd2JavaPlugin implements Plugin<Project> {
      * @param xjc The source set used to add the dependencies to.
      */
     private static void addsDependencies(Project project, SourceSet xjc) {
-        project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-core:$XML_BIND_VERSION")
-        project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-impl:$XML_BIND_VERSION")
-        project.dependencies.add(xjc.compileConfigurationName, "javax.xml.bind:jaxb-api:$XML_BIND_VERSION")
-        project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-xjc:$XML_BIND_VERSION")
+        project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-core:2.3.0.1")
+        project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-impl:2.3.2")
+        project.dependencies.add(xjc.compileConfigurationName, "javax.xml.bind:jaxb-api:2.3.1")
+        project.dependencies.add(xjc.compileConfigurationName, "com.sun.xml.bind:jaxb-xjc:2.3.2")
         project.dependencies.add(xjc.compileConfigurationName, "javax.activation:activation:1.1.1")
 
         project.dependencies.add('xsd2javaExtension', "com.github.jaxb-xew-plugin:jaxb-xew-plugin:1.9")

@@ -18,7 +18,6 @@ package de.qaware.gradle.plugin.xsd2java.xjc.tasks
 import org.gradle.api.DefaultTask
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.*
-
 /**
  * Generates java sources from a xsd schema.
  */
@@ -57,6 +56,16 @@ class XSD2JavaTask extends DefaultTask {
     @OutputDirectory
             outputDir = project.file("$project.buildDir/generated-sources/xsd2java")
 
+    XSD2JavaTask() {
+        this.dependsOn(project.configurations.xsd2javaCompileClasspath)
+
+        project.afterEvaluate {
+            if (extension) {
+                dependsOn(project.configurations.xsd2javaExtension)
+            }
+        }
+    }
+
     /**
      * The actually action for generating the java sources.
      */
@@ -66,7 +75,7 @@ class XSD2JavaTask extends DefaultTask {
         ant.taskdef(
                 name: 'xjc',
                 classname: 'com.sun.tools.xjc.XJCTask',
-                classpath: project.configurations.xsd2javaCompile.asPath
+                classpath: project.configurations.xsd2javaCompileClasspath.asPath
         )
 
         logging.level = LogLevel.DEBUG
