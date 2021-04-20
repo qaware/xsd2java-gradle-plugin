@@ -72,6 +72,10 @@ class XSD2JavaTask extends DefaultTask {
     @TaskAction
     @SuppressWarnings("GroovyUnusedDeclaration")
     void generateSourcesFromXSD() {
+        if (!outputDir.exists()) {
+            outputDir.mkdirs()
+        }
+
         ant.taskdef(
                 name: 'xjc',
                 classname: 'com.sun.tools.xjc.XJCTask',

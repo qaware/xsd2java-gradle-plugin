@@ -7,17 +7,16 @@ The XSD2Java Gradle Plugin generates java classes from an existing XSD schema. F
 
 ## Usage
 
-Build script snippet for use in all Gradle versions, using the Bintray Maven repository:
+Build script snippet for use in all Gradle versions:
 ```groovy
 buildscript {
     repositories {
-        mavenCentral()
         maven {
-            url 'https://dl.bintray.com/qaware-oss/gradle-plugins'
+            url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
-        classpath 'de.qaware.gradle.plugin:xsd2java-gradle-plugin:1.0.0'
+        classpath 'de.qaware.gradle.plugin:xsd2java-gradle-plugin:2.0.0'
     }
 }
 
@@ -27,7 +26,7 @@ apply plugin: 'de.qaware.gradle.plugin.xsd2java'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.gradle.plugin.xsd2java' version '1.0.0'
+    id 'de.qaware.gradle.plugin.xsd2java' version '2.0.0'
 }
 ```
 ## Tasks
@@ -63,7 +62,7 @@ Property name | Type   | Default value | Description
 The following example show the full extension configuration:
 ```groovy
 plugins {
-    id 'de.qaware.gradle.plugin.xsd2java' version '1.0.0'
+    id 'de.qaware.gradle.plugin.xsd2java' version '2.0.0'
 }
 
 xsd2java {
@@ -84,7 +83,7 @@ In case you are using the Kotlin DSL for you build script, the above example loo
 
 ```kotlin
 plugins {
-    id("de.qaware.gradle.plugin.xsd2java") version "1.0.0"
+    id("de.qaware.gradle.plugin.xsd2java") version "2.0.0"
 }
 
 xsd2java {

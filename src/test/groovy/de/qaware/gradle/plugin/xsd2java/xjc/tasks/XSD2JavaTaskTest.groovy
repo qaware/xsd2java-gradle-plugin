@@ -38,6 +38,7 @@ class XSD2JavaTaskTest extends Specification {
             mavenCentral()
         }
         project.apply plugin: 'de.qaware.gradle.plugin.xsd2java'
+
     }
 
     def "GenerateSourcesFromXSD"() {
@@ -49,7 +50,7 @@ class XSD2JavaTaskTest extends Specification {
         } as XSD2JavaTask
 
         when:
-        task.execute()
+        task.generateSourcesFromXSD()
 
         then:
         assert new File(project.buildDir, '/generated-sources/xsd2java/dummySchema/BookType.java').exists()
@@ -65,7 +66,7 @@ class XSD2JavaTaskTest extends Specification {
         } as XSD2JavaTask
 
         when:
-        task.execute()
+        task.generateSourcesFromXSD()
 
         then:
         assert new File(project.buildDir, '/generated-sources/xsd2java/dummySchema/BookType.java').exists()

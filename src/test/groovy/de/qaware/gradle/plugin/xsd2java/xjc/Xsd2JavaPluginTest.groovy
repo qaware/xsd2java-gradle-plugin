@@ -15,61 +15,62 @@
  */
 package de.qaware.gradle.plugin.xsd2java.xjc
 
+import de.qaware.gradle.plugin.xsd2java.xjc.tasks.XSD2JavaTask
 import org.gradle.api.Task
 import org.gradle.testfixtures.ProjectBuilder
+import org.gradle.testkit.runner.GradleRunner
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Paths
+
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 /**
  * Unit test for the {@link Xsd2JavaPlugin}.
  */
 class Xsd2JavaPluginTest extends Specification {
-    def "apply"() {
-        setup:
+
+    @Rule
+    TemporaryFolder testProjectDir = new TemporaryFolder()
+    File buildFile
+
+    def setup() {
         def resource = Paths.get(getClass().getResource('/dummySchema.xsd').toURI())
 
-        def project = ProjectBuilder.builder().build()
-        project.repositories {
-            mavenCentral()
-        }
-
-        project.apply plugin: 'de.qaware.gradle.plugin.xsd2java'
-
-        project.xsd2java {
-            extension = true
-            schemas {
-                dummySchema {
-                    schemaDirPath resource.parent
-                    packageName "dummySchema"
-                }
+        buildFile = testProjectDir.newFile('build.gradle')
+        buildFile << """
+            plugins {
+                id 'de.qaware.gradle.plugin.xsd2java'
             }
-        }
+            
+            repositories {
+                mavenCentral()
+            }
 
-        when:
-        project.evaluate()
-
-        then:
-        assert project.tasks.xsd2javaDummySchema != null
-
-        when:
-        executeTask(project.tasks.compileXsd2javaJava)
-
-        then:
-        assert new File(project.buildDir, '/classes/java/xsd2java/dummySchema/BookType.class').exists()
-        assert new File(project.buildDir, '/classes/java/xsd2java/dummySchema/BooksType.class').exists()
+            xsd2java {
+                extension = true
+                schemas {
+                    dummySchema {
+                        schemaDirPath "${resource.parent}"
+                        packageName "dummySchema"
+                    }
+                }
+            }           
+        """
     }
 
-    /**
-     * Executes the given task including all dependencies.
-     *
-     * @param task the task to execute.
-     */
-    void executeTask(Task task) {
-        task.taskDependencies.getDependencies(task).each {
-            subTask -> executeTask(subTask)
-        }
+    def "apply"() {
+        when:
+        def result = GradleRunner.create()
+                        .withProjectDir(testProjectDir.root)
+                        .withPluginClasspath()
+                        .withArguments("compileXsd2javaJava")
+                        .build()
 
-        task.execute()
+        then:
+        result.task(":compileXsd2javaJava").outcome == SUCCESS
+        result.task(":xsd2javaDummySchema").outcome == SUCCESS
     }
 }
