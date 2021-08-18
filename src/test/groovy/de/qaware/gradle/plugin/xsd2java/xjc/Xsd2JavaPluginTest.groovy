@@ -19,8 +19,8 @@ import de.qaware.gradle.plugin.xsd2java.xjc.tasks.XSD2JavaTask
 import org.gradle.api.Task
 import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
+import org.gradle.internal.impldep.org.junit.Rule
+import org.gradle.internal.impldep.org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Paths
@@ -33,7 +33,7 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 class Xsd2JavaPluginTest extends Specification {
 
     @Rule
-    TemporaryFolder testProjectDir = new TemporaryFolder()
+    org.gradle.internal.impldep.org.junit.rules.TemporaryFolder testProjectDir = new TemporaryFolder()
     File buildFile
 
     def setup() {
