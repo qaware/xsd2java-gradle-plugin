@@ -25,7 +25,7 @@ import java.nio.file.Paths
 /**
  * Unit test for the {@link XSD2JavaTask}.
  */
-class XSD2JavaTaskTest extends Specification {
+class XSD2JavaTaskSpec extends Specification {
     Project project
     Path resources
 
@@ -41,7 +41,7 @@ class XSD2JavaTaskTest extends Specification {
 
     }
 
-    def "GenerateSourcesFromXSD"() {
+    def "Generate Sources From XSD"() {
         setup:
         XSD2JavaTask task = project.task("xsd2JavaTask", type: XSD2JavaTask) {
             schemaDirPath = resources.toFile()
@@ -57,7 +57,7 @@ class XSD2JavaTaskTest extends Specification {
         assert new File(project.buildDir, '/generated-sources/xsd2java/dummySchema/BooksType.java').exists()
     }
 
-    def "GenerateSourcesFromXSDWithExtension"() {
+    def "Generate Sources From XSD with Extension"() {
         setup:
         XSD2JavaTask task = project.task("xsd2JavaTask", type: XSD2JavaTask) {
             schemaDirPath = resources.toFile()

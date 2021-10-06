@@ -30,7 +30,7 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 /**
  * Unit test for the {@link Xsd2JavaPlugin}.
  */
-class Xsd2JavaPluginTest extends Specification {
+class Xsd2JavaPluginSpec extends Specification {
 
     @Rule
     TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -61,7 +61,7 @@ class Xsd2JavaPluginTest extends Specification {
         """
     }
 
-    def "apply"() {
+    def "Apply Xsd2Java Plugin"() {
         when:
         def result = GradleRunner.create()
                         .withProjectDir(testProjectDir.root)

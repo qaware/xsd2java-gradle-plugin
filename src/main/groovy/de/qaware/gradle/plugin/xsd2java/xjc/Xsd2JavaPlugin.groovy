@@ -107,7 +107,7 @@ class Xsd2JavaPlugin implements Plugin<Project> {
             })
         }
 
-        project.dependencies.add('compile', sourceSet.output)
+        project.dependencies.add('implementation', sourceSet.output)
         sourceSet
     }
 }

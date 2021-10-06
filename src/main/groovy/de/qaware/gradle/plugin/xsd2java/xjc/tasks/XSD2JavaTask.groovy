@@ -82,8 +82,6 @@ class XSD2JavaTask extends DefaultTask {
                 classpath: project.configurations.xsd2javaCompileClasspath.asPath
         )
 
-        logging.level = LogLevel.DEBUG
-
         ant.xjc(
                 removeOldOutput: 'yes',
                 destdir: outputDir,
