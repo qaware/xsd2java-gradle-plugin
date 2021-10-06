@@ -21,18 +21,18 @@ buildscript {
     }
 }
 
+
 plugins {
     id "com.github.hierynomus.license" version "0.16.1"
     id "org.sonarqube" version "3.1.1"
     id 'java-gradle-plugin'
     id "com.gradle.plugin-publish" version "0.14.0"
+    id 'base'
+    id 'java'
+    id 'groovy'
+    id 'jacoco'
+    id 'maven-publish'
 }
-
-apply plugin: 'base'
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'jacoco'
-apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -45,6 +45,7 @@ dependencies {
     implementation gradleApi()
     implementation(localGroovy())
 
+    testImplementation 'org.spockframework:spock-junit4:2.0-groovy-3.0'
     testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
 }
