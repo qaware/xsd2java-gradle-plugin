@@ -4,6 +4,9 @@
 
 The XSD2Java Gradle Plugin generates java classes from an existing XSD schema. For this it uses the existing ANT task.
 
+[!NOTE]
+To use javax namespace, you must use a version < 3.1.0 of this plugin. From 3.1.0 it uses the jakarta namespace for xml.
+
 ## Usage
 
 Build script snippet for use in all Gradle versions:
