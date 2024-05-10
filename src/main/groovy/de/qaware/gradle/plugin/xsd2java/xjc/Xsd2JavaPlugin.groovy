@@ -71,14 +71,14 @@ class Xsd2JavaPlugin implements Plugin<Project> {
      * @param xjc The source set used to add the dependencies to.
      */
     private static void addsDependencies(Project project, SourceSet xjc) {
-        project.dependencies.add(xjc.implementationConfigurationName, "com.sun.xml.bind:jaxb-core:2.3.0.1")
-        project.dependencies.add(xjc.implementationConfigurationName, "com.sun.xml.bind:jaxb-impl:2.3.2")
-        project.dependencies.add(xjc.implementationConfigurationName, "javax.xml.bind:jaxb-api:2.3.1")
-        project.dependencies.add(xjc.implementationConfigurationName, "com.sun.xml.bind:jaxb-xjc:2.3.2")
+        project.dependencies.add(xjc.implementationConfigurationName, "org.glassfish.jaxb:jaxb-core:4.0.5")
+        project.dependencies.add(xjc.implementationConfigurationName, "org.glassfish.jaxb:jaxb-runtime:4.0.5")
+        project.dependencies.add(xjc.implementationConfigurationName, "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")
+        project.dependencies.add(xjc.implementationConfigurationName, "org.glassfish.jaxb:jaxb-xjc:4.0.5")
         project.dependencies.add(xjc.implementationConfigurationName, "javax.activation:activation:1.1.1")
 
-        project.dependencies.add('xsd2javaExtension', "com.github.jaxb-xew-plugin:jaxb-xew-plugin:1.9")
-        project.dependencies.add('xsd2javaExtension', "net.java.dev.jaxb2-commons:jaxb-fluent-api:2.1.8")
+        project.dependencies.add('xsd2javaExtension', "com.github.jaxb-xew-plugin:jaxb-xew-plugin:2.1")
+        project.dependencies.add('xsd2javaExtension', "org.jvnet.jaxb2_commons:jaxb2-fluent-api:3.0")
     }
 
     /**
