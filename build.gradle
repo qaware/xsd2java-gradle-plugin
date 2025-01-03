@@ -21,14 +21,13 @@ buildscript {
     }
 }
 
-
 plugins {
     id "com.github.hierynomus.license" version "0.16.1"
     id "org.sonarqube" version "3.5.0.2730"
     id 'java-gradle-plugin'
     id "com.gradle.plugin-publish" version "1.2.1"
     id 'base'
-    id 'java'
+    id 'java-library'
     id 'groovy'
     id 'jacoco'
     id 'maven-publish'
@@ -103,14 +102,14 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
+task groovydocJar(type: Jar, dependsOn: [javadoc, groovydoc]) {
     archiveClassifier = 'javadoc'
     from groovydoc.destinationDir
 }
 
-artifacts {
-    archives sourcesJar
-    archives groovydocJar
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
 def pomConfig = {
@@ -161,15 +160,10 @@ def pomConfig = {
     }
 }
 
-def snapshotURL = project.hasProperty('snapshotUrl') ? project.snapshotUrl : ''
-def releaseURL = project.hasProperty('releaseUrl') ? project.releaseUrl : ''
-
 publishing {
     publications {
         xsd2javaPlugin(MavenPublication) {
             from components.java
-            artifact sourcesJar
-            artifact groovydocJar
 
             pom.withXml {
                 asNode().appendNode('name', project.displayName)
@@ -181,12 +175,20 @@ publishing {
         }
     }
     repositories {
-        // set the properties via -P to publish to your company repo
         maven {
-            url = "${project.version.endsWith('-SNAPSHOT') ? snapshotURL : releaseURL}"
+            name = "ossrh"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
             credentials {
-                username = project.hasProperty('nexusUsername') ? project.nexusUsername : ''
-                password = project.hasProperty('nexusPassword') ? project.nexusPassword : ''
+                username = System.getenv("SONATYPE_USER")
+                password = System.getenv("SONATYPE_PASSWORD")
+            }
+        }
+        maven {
+            name = "github"
+            url = "https://maven.pkg.github.com/qaware/xsd2java-gradle-plugin"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
