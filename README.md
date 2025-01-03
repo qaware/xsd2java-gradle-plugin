@@ -5,7 +5,7 @@
 The XSD2Java Gradle Plugin generates java classes from an existing XSD schema. For this it uses the existing ANT task.
 
 > [!NOTE]
-> To use javax namespace, you must use a version < 3.1.0 of this plugin. From 3.1.0 it uses the jakarta namespace for xml bindings.
+> To use javax namespace, you must use a version < 4.0.0 of this plugin. From 4.0.0 it uses the jakarta namespace for xml bindings.
 
 ## Usage
 
@@ -18,7 +18,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.gradle.plugin:xsd2java-gradle-plugin:3.1.0'
+        classpath 'de.qaware.gradle.plugin:xsd2java-gradle-plugin:4.0.0'
     }
 }
 
@@ -28,7 +28,7 @@ apply plugin: 'de.qaware.gradle.plugin.xsd2java'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.gradle.plugin.xsd2java' version '3.1.0'
+    id 'de.qaware.gradle.plugin.xsd2java' version '4.0.0'
 }
 ```
 ## Tasks
@@ -64,7 +64,7 @@ Property name | Type   | Default value | Description
 The following example show the full extension configuration:
 ```groovy
 plugins {
-    id 'de.qaware.gradle.plugin.xsd2java' version '3.0.0'
+    id 'de.qaware.gradle.plugin.xsd2java' version '4.0.0'
 }
 
 xsd2java {
@@ -85,7 +85,7 @@ In case you are using the Kotlin DSL for you build script, the above example loo
 
 ```kotlin
 plugins {
-    id("de.qaware.gradle.plugin.xsd2java") version "3.0.0"
+    id("de.qaware.gradle.plugin.xsd2java") version "4.0.0"
 }
 
 xsd2java {
