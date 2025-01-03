@@ -192,7 +192,7 @@ publishing {
     }
 }
 
-pluginBundle {
+gradlePlugin {
     website = project.websiteUrl
     vcsUrl = project.scmUrl
 
