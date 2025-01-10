@@ -44,19 +44,21 @@ class Xsd2JavaPluginSpec extends Specification {
             plugins {
                 id 'de.qaware.gradle.plugin.xsd2java'
             }
-            
+
             repositories {
                 mavenCentral()
             }
-
+            
             xsd2java {
-                extension = true
                 schemas {
                     dummySchema {
                         schemaDirPath "${resource.parent}"
                         packageName "dummySchema"
                     }
                 }
+
+                extension = true                
+                outputDir file("${testProjectDir.root}/build/generated-sources/xsd2java")
             }           
         """
     }

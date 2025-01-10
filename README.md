@@ -18,7 +18,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.gradle.plugin:xsd2java-gradle-plugin:4.0.0'
+        classpath 'de.qaware.gradle.plugin:xsd2java-gradle-plugin:4.0.1'
     }
 }
 
@@ -28,7 +28,7 @@ apply plugin: 'de.qaware.gradle.plugin.xsd2java'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.gradle.plugin.xsd2java' version '4.0.0'
+    id 'de.qaware.gradle.plugin.xsd2java' version '4.0.1'
 }
 ```
 ## Tasks
@@ -64,7 +64,7 @@ Property name | Type   | Default value | Description
 The following example show the full extension configuration:
 ```groovy
 plugins {
-    id 'de.qaware.gradle.plugin.xsd2java' version '4.0.0'
+    id 'de.qaware.gradle.plugin.xsd2java' version '4.0.1'
 }
 
 xsd2java {
@@ -85,7 +85,7 @@ In case you are using the Kotlin DSL for you build script, the above example loo
 
 ```kotlin
 plugins {
-    id("de.qaware.gradle.plugin.xsd2java") version "4.0.0"
+    id("de.qaware.gradle.plugin.xsd2java") version "4.0.1"
 }
 
 xsd2java {
