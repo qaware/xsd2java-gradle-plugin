@@ -77,7 +77,7 @@ xsd2java {
     
     extension true
     arguments ['-verbose']
-    outputDir "${project.buildDir}/generated-sources/xsd2java"
+    outputDir file("${project.buildDir}/generated-sources/xsd2java")
 }
 ```
 
